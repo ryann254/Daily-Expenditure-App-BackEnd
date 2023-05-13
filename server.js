@@ -1,32 +1,31 @@
-const express = require("express");
-const path = require("path");
-const dotenv = require("dotenv");
-const colors = require("colors");
-const morgan = require("morgan");
-const connectDb = require("./config/db");
-const cors = require("cors");
+const express = require('express');
+const path = require('path');
+const colors = require('colors');
+const morgan = require('morgan');
+const connectDb = require('./config/db');
+const cors = require('cors');
 
-dotenv.config({ path: "./config/config.env" });
+require('dotenv').config();
 
 connectDb();
 
-const transactions = require("./routes/transactions");
+const transactions = require('./routes/transactions');
 
 const app = express();
 
 app.use(express.json());
 
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
 }
 app.use(cors());
-app.use("/api/v1/transactions", transactions);
+app.use('/api/v1/transactions', transactions);
 
-if (process.env.NODE_ENV == "production") {
-  app.use(express.static("client/build"));
+if (process.env.NODE_ENV == 'production') {
+  app.use(express.static('client/build'));
 
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
   );
 }
 
